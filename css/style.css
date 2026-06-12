@@ -1,0 +1,475 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+main,
+footer {
+    padding: 1.5rem;
+}
+
+.navbar {
+    background-color: #f5f4f5 !important;
+    box-shadow: 0 1px 14px rgba(0, 0, 0, 0.06);
+}
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #011d4c;
+}
+
+.p-color {
+    color: #24282e;
+}
+
+.dashboard-cards {
+    width: 100%;
+}
+
+.dashboard-card {
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.dashboard-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.dashboard-card-valor {
+    font-size: 2rem;
+    line-height: 1.1;
+    margin: 0.35rem 0;
+    font-weight: 700;
+    color: #101318;
+}
+
+#viajes-planificados {
+    color: #2f6e45;
+}
+
+#viajes-completados {
+    color: #3f6ea1;
+}
+
+#presupuesto-total {
+    color: #8f5f15;
+}
+
+#dias-totales {
+    color: #653a87;
+}
+
+.dashboard-card-texto {
+    font-size: 0.98rem;
+    line-height: 1.25;
+    margin: 0;
+    color: #303742;
+}
+
+.dashboard-card-planificados {
+    background-color: #e7f4ea;
+}
+
+.dashboard-card-planificados .dashboard-icon {
+    background-color: #d0e9d8;
+    color: #2f6e45;
+}
+
+.dashboard-card-completados {
+    background-color: #e5effa;
+}
+
+.dashboard-card-completados .dashboard-icon {
+    background-color: #d5e6fa;
+    color: #3f6ea1;
+}
+
+.dashboard-card-presupuesto {
+    background-color: #f7ecd8;
+}
+
+.dashboard-card-presupuesto .dashboard-icon {
+    background-color: #f1ddbc;
+    color: #8f5f15;
+}
+
+.dashboard-card-dias {
+    background-color: #eee1f6;
+}
+
+.dashboard-card-dias .dashboard-icon {
+    background-color: #e4d2f3;
+    color: #653a87;
+}
+
+.card-body {
+    padding: 2.2rem 1.25rem;
+}
+
+
+/* FILTRO */
+
+.form-check-input:checked {
+    background-color: #7fbbf6;
+    border-color: #7fbbf6;
+}
+
+.form-check-input:focus {
+    border-color: #7fbbf6;
+    outline: 0;
+    box-shadow: 0 0 0 .15rem rgba(13, 110, 253, .15);
+}
+
+
+/* MIS VIAJES */
+
+#viajes {
+    margin-top: 1.25rem;
+}
+
+.viajes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 4rem;
+}
+
+.viajes-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+#viajes-container {
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 767.98px) {
+    .viajes-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .viajes-acciones {
+        justify-content: flex-start;
+    }
+}
+
+.boton-gris,
+.boton-verde,
+#btn-eliminar-viaje {
+    border-radius: 20px;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.boton-verde {
+    background-color: #4b9f73 !important;
+    color: #ffffff;
+}
+
+.boton-verde:hover,
+.boton-verde:active,
+.boton-verde:focus-visible {
+    background-color: #3d8d63 !important;
+}
+
+.card-viaje-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.card-viaje-link:hover .card-viaje,
+.card-viaje-link:focus-visible .card-viaje {
+    transform: scale(1.02);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.14);
+}
+
+.card-viaje-link:active .card-viaje {
+    transform: scale(0.99);
+}
+
+.card-viaje {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+    background: #ffffff;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    transform: translateY(0);
+    will-change: transform;
+}
+
+.card-viaje-media {
+    position: relative;
+    min-height: 230px;
+    background-size: cover;
+    background-position: center;
+    /* background-image: url("https://placehold.net/default.svg"); */
+}
+
+.card-viaje-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.18));
+}
+
+.placa-viaje {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    /* background: #595b2a; */
+}
+
+a {
+    text-decoration: none;
+}
+
+.card-viaje-body {
+    padding: 1rem 1rem 1.15rem;
+}
+
+.titulo-viaje {
+    font-size: 1.15rem;
+    margin: 0 0 0.35rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.fechas-viaje {
+    margin: 0 0 0.65rem;
+    font-size: 0.94rem;
+    color: #6b7280;
+}
+
+.precio-viaje {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.05rem;
+    /* color: #2f6e45; */
+}
+
+#no-viajes {
+    margin-top: 4rem;
+    font-size: 1.1rem;
+    color: #6b7280;
+    text-align: center;
+    font-style: italic;
+}
+
+
+/* modal edicion */
+
+.edit-trip-modal {
+    border-radius: 18px;
+}
+
+#form-editar-viaje {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.form-row .form-section {
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #243142;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #d9dfe5;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #4b9f73;
+    box-shadow: 0 0 0 0.2rem rgba(75, 159, 115, 0.1);
+}
+
+
+/* Image Upload */
+
+.image-upload-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.image-upload-wrapper .form-control {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+}
+
+.image-upload-wrapper .form-text {
+    font-size: 0.85rem;
+}
+
+
+/* Image Preview */
+
+.preview-imagen {
+    position: relative;
+    min-height: 230px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.image-preview::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.18));
+    border-radius: 12px;
+}
+
+.image-preview .placa-viaje {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Color Picker - Vertical Layout */
+
+.color-picker-input-large {
+    width: 80px;
+    height: 80px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 3px solid #d9dfe5;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.color-picker-input-large:hover {
+    border-color: #4b9f73;
+    box-shadow: 0 0 0 4px rgba(75, 159, 115, 0.1);
+}
+
+.color-picker-input-large:focus {
+    outline: none;
+    border-color: #4b9f73;
+    box-shadow: 0 0 0 4px rgba(75, 159, 115, 0.2);
+}
+
+.color-label-large {
+    font-size: 0.95rem;
+    color: #6b7280;
+    font-family: "Courier New", monospace;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+
+/* Color Picker - Horizontal Layout (deprecated) */
+
+.color-picker-input {
+    width: 60px;
+    height: 40px;
+    padding: 3px;
+    border-radius: 8px;
+    border: 2px solid #d9dfe5;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.color-picker-input:hover {
+    border-color: #4b9f73;
+}
+
+.color-picker-input:focus {
+    outline: none;
+    border-color: #4b9f73;
+    box-shadow: 0 0 0 3px rgba(75, 159, 115, 0.1);
+}
+
+
+/* Responsive */
+
+@media (max-width: 991.98px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    .image-preview {
+        min-height: 180px;
+    }
+    .color-picker-wrapper-vertical {
+        padding: 1.25rem;
+    }
+    .color-picker-input-large {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    .image-preview {
+        min-height: 160px;
+    }
+    .color-picker-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .color-label {
+        min-width: auto;
+    }
+    .color-picker-wrapper-vertical {
+        width: 100%;
+    }
+}
