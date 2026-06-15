@@ -61,11 +61,70 @@ document.getElementById('btn-nuevo-viaje').addEventListener('click', function() 
     actualizarPreview();
 });
 
+//Lista de Paises y ciudades
+const BASE_URL = 'https://countriesnow.space/api/v0.1/countries'
+let paisList = document.getElementById('paisList')
+let ciudadList = document.getElementById('ciudadList')
+
+
+let getPais = async () => {
+    let data = await fetch(BASE_URL).then(response => response.json())
+    const countries = data.data
+    countries.forEach((country) => {
+        let option = document.createElement("option")
+        option.appendChild(document.createTextNode(`${country.country}`))
+        paisList.appendChild(option)
+    })
+}
+
+let getCiudades = async (paisName) => {
+
+    try {
+        let response = await fetch(`${BASE_URL}/cities`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ country: paisName })
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        let data = await response.json();
+        const cities = data.data;
+
+        cities.forEach((city) => {
+            let option = document.createElement("option");
+            option.textContent = city;
+            option.value = city;
+            ciudadList.appendChild(option);
+        });
+
+        ciudadList.disabled = false;
+
+    } catch (error) {
+        console.error("Failed to fetch cities:", error);
+        ciudadList.innerHTML = '<option value="">Error</option>';
+    }
+}
+
+paisList.addEventListener('change', (event) => {
+    const selectedCountry = event.target.value;
+
+    if (selectedCountry) {
+        getCiudades(selectedCountry);
+    } else {
+        // Reset and disable city list if no country is selected
+        ciudadList.innerHTML = '<option value="">Select a city</option>';
+        ciudadList.disabled = true;
+    }
+});
+
+getPais();
 
 // actualizar preview en tiempo real
 document.getElementById("color").addEventListener("input", actualizarPreview);
 document.getElementById("pais").addEventListener("input", actualizarPreview);
-
 
 // cargar imagen seleccionada
 document.getElementById("imagen-viaje").addEventListener("change", function() {
@@ -476,6 +535,15 @@ function formatearFecha(fecha) {
     return dia + " " + meses[mes] + ", " + anio;
 }
 
+var requestOptions = {
+  method: 'GET',
+  redirect: 'follow'
+};
+
+fetch("https://countriesnow.space/api/v0.1/countries/flag/images", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
 
 // cargar viajes al iniciar la aplicación
 cargarViajes();
