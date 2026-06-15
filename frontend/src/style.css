@@ -1,10 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 body {
-    margin: 0;
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Lexend", sans-serif;
+            /*font-family: "Nunito", sans-serif !important; /* Cambiado a Nunito para textos generales */
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+    }               esto es original
+/* Forzamos a que los títulos sí usen Lexend como en tu diseño original */
+h1, h2, h3, .titulo-viaje {
+    font-family: "Lexend", sans-serif !important;
+}
+
+
+main{
     min-height: 100vh;
-    font-family: "Lexend", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
 }
 
 main,
@@ -472,4 +484,54 @@ a {
     .color-picker-wrapper-vertical {
         width: 100%;
     }
+}
+
+footer{
+
+    background-color: #eaeaea;
+        text-align: center;
+}
+
+
+
+
+
+/*AYUDA DE LA IA    PROBAR  Y SI NO SIRVE BORRAR-
+-SOLO AGREGA LOS "COLORES" Y LOS BORDES PERO FALTAN LAS FUENTES       */
+
+
+/* Estilos generales para todas las tarjetas del panel */
+.dashboard-card-planificados,
+.dashboard-card-completados {
+    border-radius: 16px !important; /* Fuerza los bordes redondeados */
+    border: none !important;        /* Elimina cualquier borde gris de Bootstrap */
+    padding: 1.25rem;
+    font-family: 'Nunito', sans-serif !important; /* Fuerza tu tipografía */
+}
+
+/* Color de fondo verde pastel para Viajes Planificados */
+.dashboard-card-planificados {
+    background-color: #e8f5e9 !important; 
+}
+
+/* Color de fondo azul pastel para Viajes Completados */
+.dashboard-card-completados {
+    background-color: #e3f2fd !important; 
+}
+
+/* Estilos para los números grandes dentro de las tarjetas */
+.dashboard-card-valor {
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0a2540; /* Tu azul oscuro original */
+    margin: 0;
+}
+
+/* Estilos para los textos descriptivos abajo del número */
+.dashboard-card-texto {
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 0.9rem;
+    color: #627d98;
+    margin: 0;
 }
