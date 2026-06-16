@@ -150,34 +150,40 @@
                             </div>
                             <div class="modal-body">
                                 <form id="form-modal">
-                                    <!-- Imagen y color picker -->
-                                    <div class="row">
-                                        <div id="vista-previa" class="form-section justify-content-center col-lg-6">
-                                            <!-- preview generada en js -->
-                                        </div>
-
-                                        <div class="form-section col-lg-6">
-                                            <label for="imagen-viaje" class="form-label">Cargar nueva
-                                                imagen</label>
-                                            <div class="image-upload-wrapper">
-                                                <input type="file" class="form-control" id="imagen-viaje" accept="image/*">
-                                                <small class="form-text text-muted">
-                                                    JPG, PNG o GIF. Tamaño máximo 5MB.
-                                                </small>
-                                            </div>
-                                            <label for="color" class="form-label mt-3">Color de la
-                                                tarjeta</label>
-                                            <input type="color" class="form-control color-picker-input-large" id="color">
-                                        </div>
+                                    <!-- Bandera seleccionada-->
+                                    <div class="form-section col-lg-6">
+                                       <div class="image-upload-wrapper" id="imagen-viaje">
+                                        <img id="paisBandera" src="" alt="Bandera del Pais">
+                                       </div>
                                     </div>
-
+                                    <!-- Imagen y color picker -->
+                                     <!--
+                                        <div class="row">
+                                            <div id="vista-previa" class="form-section justify-content-center col-lg-6">
+                                                
+                                            </div>
+    
+                                            <div class="form-section col-lg-6">
+                                                <label for="imagen-viaje" class="form-label">Cargar nueva
+                                                    imagen</label>
+                                                <div class="image-upload-wrapper">
+                                                    <input type="file" class="form-control" id="imagen-viaje" accept="image/*">
+                                                    <small class="form-text text-muted">
+                                                        JPG, PNG o GIF. Tamaño máximo 5MB.
+                                                    </small>
+                                                </div>
+                                                <label for="color" class="form-label mt-3">Color de la
+                                                    tarjeta</label>
+                                                <input type="color" class="form-control color-picker-input-large" id="color">
+                                            </div>
+                                        </div>
+                                        -->
+                                        
                                     <!-- Información del viaje -->
                                     <div class="row">
                                         <div class="form-section col-md-6">
-                                            <label for="pais" class="form-label">País</label>
-                                            <select name="pais" id="paisList">
-                                                <option>--------</option>
-                                            </select>
+                                            <label for="paisList" class="form-label">País</label>
+                                            <select name="paisList" id="paisList"></select>
                                             <!--
                                                 <label for="pais" class="form-label">País</label>
                                                 <input type="text" class="form-control" id="pais" placeholder="Ej: Francia" required>
@@ -185,9 +191,9 @@
 
                                         </div>
                                         <div class="form-section col-md-6">
-                                            <label for="ciudad" class="form-label">Ciudad</label>
-                                            <select name="ciudad" id="ciudadList">
-                                                <option>--------</option>
+                                            <label for="ciudadList" class="form-label">Ciudad</label>
+                                            <select name="ciudadList" id="ciudadList">
+                                                <option>Seleccione Ciudad</option>
                                             </select>
                                             <!--
                                                 <label for="ciudad" class="form-label">Ciudad/es</label>

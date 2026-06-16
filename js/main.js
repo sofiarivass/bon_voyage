@@ -2,8 +2,8 @@ class Viaje {
     id;
     imagen;
     color;
-    pais;
-    ciudad;
+    paisList;
+    ciudadList;
     ida;
     vuelta;
     presupuesto;
@@ -11,12 +11,12 @@ class Viaje {
     estado;
     dias;
 
-    constructor(imagen, color, pais, ciudad, ida, vuelta, presupuesto, notas, estado) {
+    constructor(imagen, color, paisList, ciudadList, ida, vuelta, presupuesto, notas, estado) {
         this.id = Date.now();
         this.imagen = imagen;
         this.color = color;
-        this.pais = pais;
-        this.ciudad = ciudad;
+        this.paisList = paisList;
+        this.ciudadList = ciudadList;
         this.ida = ida;
         this.vuelta = vuelta;
         this.presupuesto = presupuesto;
@@ -68,16 +68,28 @@ let ciudadList = document.getElementById('ciudadList')
 
 
 let getPais = async () => {
-    let data = await fetch(BASE_URL).then(response => response.json())
-    const countries = data.data
-    countries.forEach((country) => {
-        let option = document.createElement("option")
-        option.appendChild(document.createTextNode(`${country.country}`))
-        paisList.appendChild(option)
-    })
+
+    paisList.innerHTML = '<option>Seleccione Pais</option>';
+
+    try{
+        let data = await fetch(BASE_URL).then(response => response.json());
+        const countries = data.data;
+        
+        countries.forEach((country) => {
+            let option = document.createElement("option");
+            option.textContent = country.country;
+            option.value = country.country;
+            paisList.appendChild(option);
+        });
+    } catch (error){
+        console.error("Error al cargar paises:", error);
+    }
 }
 
 let getCiudades = async (paisName) => {
+
+    ciudadList.innerHTML = '<option>Seleccione Ciudad</option>';
+    ciudadList.disabled = true;
 
     try {
         let response = await fetch(`${BASE_URL}/cities`, {
@@ -93,6 +105,10 @@ let getCiudades = async (paisName) => {
         let data = await response.json();
         const cities = data.data;
 
+        if(cities.length === 0) {
+            ciudadList.innerHTML = '<option> No hay ciudades disponibles </option>';
+        }
+
         cities.forEach((city) => {
             let option = document.createElement("option");
             option.textContent = city;
@@ -103,28 +119,80 @@ let getCiudades = async (paisName) => {
         ciudadList.disabled = false;
 
     } catch (error) {
-        console.error("Failed to fetch cities:", error);
+        console.error("Fallo en encontrar ciudades:", error);
         ciudadList.innerHTML = '<option value="">Error</option>';
     }
 }
 
 paisList.addEventListener('change', (event) => {
-    const selectedCountry = event.target.value;
+    const paisSeleccionado = event.target.value;
 
-    if (selectedCountry) {
-        getCiudades(selectedCountry);
+    if (paisSeleccionado && paisSeleccionado != "") {
+        getCiudades(paisSeleccionado);
     } else {
-        // Reset and disable city list if no country is selected
-        ciudadList.innerHTML = '<option value="">Select a city</option>';
+        ciudadList.innerHTML = '<option value="">Seleccione Ciudad</option>';
         ciudadList.disabled = true;
     }
 });
 
 getPais();
 
+//Pais y su bandera
+
+let getBandera = async(paisName) => {
+
+    if(!paisName || paisName.trim()==="") return;
+
+    let imgBandera = document.getElementById('paisBandera');
+
+    try{
+        let response = await fetch(`${BASE_URL}/flag/images` , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ country: paisName })
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        let data = await response.json();
+        
+        if (data.error){
+            console.error("API error", data.msg);
+            return;
+        }
+
+        const flagURL = data.data.flag;
+
+        imgBandera.src = flagURL;
+        imgBandera.style.display = "block"
+
+
+
+    }catch (error){
+        console.error("Fallo en encontrar bandera");
+        imgBandera.style.display = "none"
+    }
+}
+
+paisList.addEventListener('change', (event) => {
+    const paisSeleccionado = event.target.value;
+
+    if(paisSeleccionado && paisSeleccionado != ""){
+        getCiudades(paisSeleccionado);
+        getBandera(paisSeleccionado);
+    } else{
+        ciudadList.innerHTML = '<option value="">Seleccione Ciudad</option>';
+        ciudadList.disabled = true;
+
+        document.getElementById('paisBandera').style.display = "none";
+    }
+})
+
 // actualizar preview en tiempo real
 document.getElementById("color").addEventListener("input", actualizarPreview);
-document.getElementById("pais").addEventListener("input", actualizarPreview);
+document.getElementById("paisList").addEventListener("input", actualizarPreview);
 
 // cargar imagen seleccionada
 document.getElementById("imagen-viaje").addEventListener("change", function() {
@@ -196,8 +264,8 @@ document.getElementById('btn-editar-viaje').addEventListener('click', function()
     imagen_actual = viaje_seleccionado.imagen;
 
     document.getElementById("color").value = viaje_seleccionado.color;
-    document.getElementById("pais").value = viaje_seleccionado.pais;
-    document.getElementById("ciudad").value = viaje_seleccionado.ciudad;
+    document.getElementById("paisList").value = viaje_seleccionado.paisList;
+    document.getElementById("ciudadList").value = viaje_seleccionado.ciudadList;
     document.getElementById("ida").value = viaje_seleccionado.ida;
     document.getElementById("vuelta").value = viaje_seleccionado.vuelta;
     document.getElementById("presupuesto").value = viaje_seleccionado.presupuesto;
@@ -245,14 +313,14 @@ filtro.addEventListener("input", function() {
 // actualiza la vista previa del form
 function actualizarPreview() {
     let color = document.getElementById("color").value;
-    let pais = document.getElementById("pais").value;
+    let paisList = document.getElementById("paisList").value;
 
     vista_previa.innerHTML = `
         <label class="form-label">Vista previa</label>
         <div class="preview-imagen card-viaje-media"
             style="background-image: url('${imagen_actual}');">
             <span class="placa-viaje" style="background: ${color}">
-                ${pais}
+                ${paisList}
             </span>
         </div>
     `;
@@ -262,8 +330,8 @@ function actualizarPreview() {
 // guardar viaje
 function guardarViaje(img) {
     let color = document.getElementById("color").value;
-    let pais = document.getElementById("pais").value;
-    let ciudad = document.getElementById("ciudad").value;
+    let paisList = document.getElementById("paisList").value;
+    let ciudadList = document.getElementById("ciudadList").value;
     let ida = document.getElementById("ida").value;
     let vuelta = document.getElementById("vuelta").value;
     let presupuesto = document.getElementById("presupuesto").value;
@@ -286,8 +354,8 @@ function guardarViaje(img) {
         let viaje = new Viaje(
             img,
             color,
-            pais,
-            ciudad,
+            paisList,
+            ciudadList,
             ida,
             vuelta,
             presupuesto,
@@ -303,8 +371,8 @@ function guardarViaje(img) {
             if (viajes[i].id == id) {
                 viajes[i].imagen = img;
                 viajes[i].color = color;
-                viajes[i].pais = pais;
-                viajes[i].ciudad = ciudad;
+                viajes[i].paisList = paisList;
+                viajes[i].ciudadList = ciudadList;
                 viajes[i].ida = ida;
                 viajes[i].vuelta = vuelta;
                 viajes[i].presupuesto = presupuesto;
@@ -383,10 +451,10 @@ function cargarViajes() {
                 class="card-viaje-link">
                 <article class="card card-viaje border-0 h-100">
                     <div class="card-viaje-media" style="background-image: url('${viaje.imagen}');">
-                        <span class="placa-viaje" style="background: ${viaje.color}">${viaje.pais}</span>
+                        <span class="placa-viaje" style="background: ${viaje.color}">${viaje.paisList}</span>
                     </div>
                     <div class="card-body card-viaje-body">
-                        <h2 class="titulo-viaje">${viaje.ciudad}</h2>
+                        <h2 class="titulo-viaje">${viaje.ciudadList}</h2>
                         <p class="fechas-viaje">${formatearFecha(viaje.ida)} - ${formatearFecha(viaje.vuelta)}</p>
                         <p class="precio-viaje" style="color: ${viaje.color}; opacity: 0.6;">$${viaje.presupuesto}</p>
                     </div>
@@ -411,8 +479,8 @@ function cargarViajes() {
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <span class="badge rounded-pill" style="background: ${viaje.color}; color: #fff;">${viaje.estado}</span>
                         </div>
-                        <h2 class="h3 mb-2">${viaje.ciudad}</h2>
-                        <p class="text-muted mb-4">${viaje.pais}</p>
+                        <h2 class="h3 mb-2">${viaje.ciudadList}</h2>
+                        <p class="text-muted mb-4">${viaje.paisList}</p>
                         <div class="row g-3 mb-4">
                             <div class="col-sm-6">
                                 <div class="p-3 rounded-3 border bg-light h-100">
@@ -534,16 +602,6 @@ function formatearFecha(fecha) {
     let meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
     return dia + " " + meses[mes] + ", " + anio;
 }
-
-var requestOptions = {
-  method: 'GET',
-  redirect: 'follow'
-};
-
-fetch("https://countriesnow.space/api/v0.1/countries/flag/images", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
 
 // cargar viajes al iniciar la aplicación
 cargarViajes();
