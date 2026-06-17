@@ -1,7 +1,6 @@
 class Viaje {
     id;
     imagen;
-    color;
     paisList;
     ciudadList;
     ida;
@@ -11,10 +10,9 @@ class Viaje {
     estado;
     dias;
 
-    constructor(imagen, color, paisList, ciudadList, ida, vuelta, presupuesto, notas, estado) {
+    constructor(imagen, paisList, ciudadList, ida, vuelta, presupuesto, notas, estado) {
         this.id = Date.now();
         this.imagen = imagen;
-        this.color = color;
         this.paisList = paisList;
         this.ciudadList = ciudadList;
         this.ida = ida;
@@ -191,7 +189,7 @@ paisList.addEventListener('change', (event) => {
 })
 
 // actualizar preview en tiempo real
-document.getElementById("color").addEventListener("input", actualizarPreview);
+
 document.getElementById("paisList").addEventListener("input", actualizarPreview);
 
 // cargar imagen seleccionada
@@ -263,7 +261,7 @@ document.getElementById('btn-editar-viaje').addEventListener('click', function()
     id = viaje_seleccionado.id;
     imagen_actual = viaje_seleccionado.imagen;
 
-    document.getElementById("color").value = viaje_seleccionado.color;
+    
     document.getElementById("paisList").value = viaje_seleccionado.paisList;
     document.getElementById("ciudadList").value = viaje_seleccionado.ciudadList;
     document.getElementById("ida").value = viaje_seleccionado.ida;
@@ -312,14 +310,14 @@ filtro.addEventListener("input", function() {
 
 // actualiza la vista previa del form
 function actualizarPreview() {
-    let color = document.getElementById("color").value;
+    
     let paisList = document.getElementById("paisList").value;
 
     vista_previa.innerHTML = `
         <label class="form-label">Vista previa</label>
         <div class="preview-imagen card-viaje-media"
             style="background-image: url('${imagen_actual}');">
-            <span class="placa-viaje" style="background: ${color}">
+            <span class="placa-viaje">
                 ${paisList}
             </span>
         </div>
@@ -329,7 +327,7 @@ function actualizarPreview() {
 
 // guardar viaje
 function guardarViaje(img) {
-    let color = document.getElementById("color").value;
+    
     let paisList = document.getElementById("paisList").value;
     let ciudadList = document.getElementById("ciudadList").value;
     let ida = document.getElementById("ida").value;
@@ -353,7 +351,6 @@ function guardarViaje(img) {
         // crear nuevo viaje
         let viaje = new Viaje(
             img,
-            color,
             paisList,
             ciudadList,
             ida,
@@ -370,7 +367,6 @@ function guardarViaje(img) {
         for (let i = 0; i < viajes.length; i++) {
             if (viajes[i].id == id) {
                 viajes[i].imagen = img;
-                viajes[i].color = color;
                 viajes[i].paisList = paisList;
                 viajes[i].ciudadList = ciudadList;
                 viajes[i].ida = ida;
@@ -451,12 +447,12 @@ function cargarViajes() {
                 class="card-viaje-link">
                 <article class="card card-viaje border-0 h-100">
                     <div class="card-viaje-media" style="background-image: url('${viaje.imagen}');">
-                        <span class="placa-viaje" style="background: ${viaje.color}">${viaje.paisList}</span>
+                        <span class="placa-viaje" >${viaje.paisList}</span>
                     </div>
                     <div class="card-body card-viaje-body">
                         <h2 class="titulo-viaje">${viaje.ciudadList}</h2>
                         <p class="fechas-viaje">${formatearFecha(viaje.ida)} - ${formatearFecha(viaje.vuelta)}</p>
-                        <p class="precio-viaje" style="color: ${viaje.color}; opacity: 0.6;">$${viaje.presupuesto}</p>
+                        <p class="precio-viaje" >$${viaje.presupuesto}</p>
                     </div>
                 </article>
             </div>
@@ -468,7 +464,7 @@ function cargarViajes() {
             modal_detalles.innerHTML = `
                 <div class="row g-4 align-items-start">
                     <div class="col-12 col-lg-5">
-                        <div class="card border-0 h-100 shadow-sm overflow-hidden" style="background: ${viaje.color};">
+                        <div class="card border-0 h-100 shadow-sm overflow-hidden" >
 
                             <div class="card-body p-0">
                                 <div class="card-viaje-media" style="min-height: 308px; background-image: url('${viaje.imagen}');"></div>
