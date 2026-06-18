@@ -189,12 +189,12 @@ paisList.addEventListener('change', (event) => {
 })
 
 // actualizar preview en tiempo real
-
 document.getElementById("paisList").addEventListener("input", actualizarPreview);
 
 // cargar imagen seleccionada
 document.getElementById("imagen-viaje").addEventListener("change", function() {
     let inputImagen = document.getElementById("imagen-viaje");
+
     let archivo = inputImagen.files[0];
     if (archivo) {
         let reader = new FileReader();
@@ -317,9 +317,7 @@ function actualizarPreview() {
         <label class="form-label">Vista previa</label>
         <div class="preview-imagen card-viaje-media"
             style="background-image: url('${imagen_actual}');">
-            <span class="placa-viaje">
-                ${paisList}
-            </span>
+                <img id="paisBandera" src="" width="100px" high="50px">
         </div>
     `;
 }
@@ -447,7 +445,7 @@ function cargarViajes() {
                 class="card-viaje-link">
                 <article class="card card-viaje border-0 h-100">
                     <div class="card-viaje-media" style="background-image: url('${viaje.imagen}');">
-                        <span class="placa-viaje" >${viaje.paisList}</span>
+                        <span class="placa-viaje">${viaje.paisList}</span>
                     </div>
                     <div class="card-body card-viaje-body">
                         <h2 class="titulo-viaje">${viaje.ciudadList}</h2>
