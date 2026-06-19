@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import BonVoyageLogo from './assets/logo.png'
+import './assets/logo.png'
 import './style.css'
 
 import Header from './assets/components/Header';
