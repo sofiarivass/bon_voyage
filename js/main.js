@@ -3,6 +3,7 @@ class Viaje {
     imagen;
     paisList;
     ciudadList;
+    paisBandera
     ida;
     vuelta;
     presupuesto;
@@ -10,11 +11,12 @@ class Viaje {
     estado;
     dias;
 
-    constructor(imagen, paisList, ciudadList, ida, vuelta, presupuesto, notas, estado) {
+    constructor(imagen, paisList, ciudadList, paisBandera, ida, vuelta, presupuesto, notas, estado) {
         this.id = Date.now();
         this.imagen = imagen;
         this.paisList = paisList;
         this.ciudadList = ciudadList;
+        this.paisBandera = paisBandera;
         this.ida = ida;
         this.vuelta = vuelta;
         this.presupuesto = presupuesto;
@@ -363,6 +365,7 @@ function guardarViaje(img) {
     
     let paisList = document.getElementById("paisList").value;
     let ciudadList = document.getElementById("ciudadList").value;
+    let paisBandera = document.getElementById("paisBandera").value;
     let ida = document.getElementById("ida").value;
     let vuelta = document.getElementById("vuelta").value;
     let presupuesto = document.getElementById("presupuesto").value;
@@ -387,6 +390,7 @@ function guardarViaje(img) {
             img,
             paisList,
             ciudadList,
+            paisBandera,
             ida,
             vuelta,
             presupuesto,
@@ -403,6 +407,7 @@ function guardarViaje(img) {
                 viajes[i].imagen = img;
                 viajes[i].paisList = paisList;
                 viajes[i].ciudadList = ciudadList;
+                viajes[i].paisBandera = paisBandera;
                 viajes[i].ida = ida;
                 viajes[i].vuelta = vuelta;
                 viajes[i].presupuesto = presupuesto;
@@ -481,7 +486,7 @@ function cargarViajes() {
                 class="card-viaje-link">
                 <article class="card card-viaje border-0 h-100">
                     <div class="card-viaje-media" style="background-image: url('${viaje.imagen}');">
-                        <span class="placa-viaje">${viaje.paisList}</span>
+                        <img src="imgBandera" class="placa-viaje"></img>
                     </div>
                     <div class="card-body card-viaje-body">
                         <h2 class="titulo-viaje">${viaje.ciudadList}</h2>
