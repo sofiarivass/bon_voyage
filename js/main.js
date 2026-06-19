@@ -69,7 +69,7 @@ let ciudadList = document.getElementById('ciudadList')
 
 let getPais = async () => {
 
-    paisList.innerHTML = '<option>Seleccione Pais</option>';
+    paisList.innerHTML = '<option></option>';
 
     try{
         let data = await fetch(BASE_URL).then(response => response.json());
@@ -88,7 +88,7 @@ let getPais = async () => {
 
 let getCiudades = async (paisName) => {
 
-    ciudadList.innerHTML = '<option>Seleccione Ciudad</option>';
+    ciudadList.innerHTML = '<option></option>';
     ciudadList.disabled = true;
 
     try {
@@ -369,6 +369,7 @@ function guardarViaje(img) {
     let notas = document.getElementById("notas").value;
     let estado = "";
     let dias = calcularDias(ida, vuelta);
+
 
     // calcular estado del viaje
     let hoy = new Date();
