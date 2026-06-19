@@ -32,6 +32,7 @@ let viaje_seleccionado = null;
 let editando = false;
 let id = null;
 let imagen_actual = "";
+let bandera_actual = "";
 
 
 // guarda los viajes recuperados en el array principal
@@ -55,6 +56,7 @@ document.getElementById('btn-nuevo-viaje').addEventListener('click', function() 
     titulo_modal.innerText = "Crear viaje";
     form_modal.reset();
     imagen_actual = "https://placehold.net/default.svg";
+    bandera_actual = "";
 
     actualizarPreview();
 });
@@ -164,13 +166,18 @@ let getBandera = async(paisName) => {
         const flagURL = data.data.flag;
 
         imgBandera.src = flagURL;
-        imgBandera.style.display = "block"
+        imgBandera.style.display = "block";
 
+        // store current flag so subsequent preview updates keep it
+        bandera_actual = flagURL;
+
+        actualizarPreview(imgBandera.src);
 
 
     }catch (error){
         console.error("Fallo en encontrar bandera");
-        imgBandera.style.display = "none"
+        imgBandera.style.display = "none";
+        bandera_actual = "";
     }
 }
 
@@ -185,6 +192,7 @@ paisList.addEventListener('change', (event) => {
         ciudadList.disabled = true;
 
         document.getElementById('paisBandera').style.display = "none";
+        bandera_actual = "";
     }
 })
 
@@ -263,7 +271,12 @@ document.getElementById('btn-editar-viaje').addEventListener('click', function()
 
     
     document.getElementById("paisList").value = viaje_seleccionado.paisList;
-    document.getElementById("ciudadList").value = viaje_seleccionado.ciudadList;
+    // populate cities for the selected country, then set the city value
+    getCiudades(viaje_seleccionado.paisList).then(() => {
+        document.getElementById("ciudadList").value = viaje_seleccionado.ciudadList;
+    });
+    // fetch and restore flag for the selected country
+    getBandera(viaje_seleccionado.paisList);
     document.getElementById("ida").value = viaje_seleccionado.ida;
     document.getElementById("vuelta").value = viaje_seleccionado.vuelta;
     document.getElementById("presupuesto").value = viaje_seleccionado.presupuesto;
@@ -309,17 +322,39 @@ filtro.addEventListener("input", function() {
 
 
 // actualiza la vista previa del form
-function actualizarPreview() {
-    
+function actualizarPreview(imgBandera) {
+
     let paisList = document.getElementById("paisList").value;
 
-    vista_previa.innerHTML = `
+    if (imgBandera == undefined) {
+        // if we don't receive a flag url, try to use the stored bandera_actual
+        if (bandera_actual && bandera_actual !== "") {
+            vista_previa.innerHTML = `
         <label class="form-label">Vista previa</label>
         <div class="preview-imagen card-viaje-media"
-            style="background-image: url('${imagen_actual}');">
-                <img id="paisBandera" src="" width="100px" high="50px">
+        style="background-image: url('${imagen_actual}');">
+        <img id="paisBandera" src="${bandera_actual}" width="100px" high="50px">
         </div>
     `;
+        } else {
+            vista_previa.innerHTML = `
+        <label class="form-label">Vista previa</label>
+        <div class="preview-imagen card-viaje-media"
+        style="background-image: url('${imagen_actual}');">
+        <img id="paisBandera" src="" style="display:none" width="100px" high="50px">
+        </div>
+    `;
+        }
+    } else {
+        vista_previa.innerHTML = `
+            <label class="form-label">Vista previa</label>
+            <div class="preview-imagen card-viaje-media"
+            style="background-image: url('${imagen_actual}');">
+            <img id="paisBandera" src="${imgBandera}" width="100px" high="50px">
+            </div>
+        `;
+    }
+
 }
 
 
