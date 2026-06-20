@@ -173,6 +173,8 @@ let getBandera = async(paisName) => {
         // store current flag so subsequent preview updates keep it
         bandera_actual = flagURL;
 
+
+
         actualizarPreview(imgBandera.src);
 
 
@@ -365,7 +367,7 @@ function guardarViaje(img) {
     
     let paisList = document.getElementById("paisList").value;
     let ciudadList = document.getElementById("ciudadList").value;
-    let paisBandera = document.getElementById("paisBandera").value;
+    //let paisBandera = document.getElementById("paisBandera").value;
     let ida = document.getElementById("ida").value;
     let vuelta = document.getElementById("vuelta").value;
     let presupuesto = document.getElementById("presupuesto").value;
@@ -390,7 +392,7 @@ function guardarViaje(img) {
             img,
             paisList,
             ciudadList,
-            paisBandera,
+            bandera_actual,
             ida,
             vuelta,
             presupuesto,
@@ -407,7 +409,7 @@ function guardarViaje(img) {
                 viajes[i].imagen = img;
                 viajes[i].paisList = paisList;
                 viajes[i].ciudadList = ciudadList;
-                viajes[i].paisBandera = paisBandera;
+                viajes[i].paisBandera = bandera_actual;
                 viajes[i].ida = ida;
                 viajes[i].vuelta = vuelta;
                 viajes[i].presupuesto = presupuesto;
@@ -486,7 +488,7 @@ function cargarViajes() {
                 class="card-viaje-link">
                 <article class="card card-viaje border-0 h-100">
                     <div class="card-viaje-media" style="background-image: url('${viaje.imagen}');">
-                        <img src="imgBandera" class="placa-viaje"></img>
+                        <img src="${viaje.paisBandera}" class="placa-viaje" width="100px" high="50px"></img>
                     </div>
                     <div class="card-body card-viaje-body">
                         <h2 class="titulo-viaje">${viaje.ciudadList}</h2>
@@ -506,7 +508,9 @@ function cargarViajes() {
                         <div class="card border-0 h-100 shadow-sm overflow-hidden" >
 
                             <div class="card-body p-0">
-                                <div class="card-viaje-media" style="min-height: 308px; background-image: url('${viaje.imagen}');"></div>
+                                <div class="card-viaje-media" style="min-height: 308px; background-image: url('${viaje.imagen}');">
+                                <img src="${viaje.paisBandera}" class="placa-viaje" width="100px" high="50px"></img>
+                                </div>
                             </div>
                         </div>
                     </div>
