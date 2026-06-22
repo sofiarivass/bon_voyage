@@ -221,10 +221,10 @@ h1 {
 
 .card-viaje-media {
     position: relative;
-    min-height: 230px;
+    min-height: 260px;
     background-size: cover;
     background-position: center;
-    /* background-image: url("https://placehold.net/default.svg"); */
+    background-image: url("https://placehold.net/default.svg");
 }
 
 .card-viaje-media::after {
@@ -334,7 +334,7 @@ a {
 }
 
 
-/* Image Upload */
+/* Image upload */
 
 .image-upload-wrapper {
     display: flex;
@@ -352,11 +352,11 @@ a {
 }
 
 
-/* Image Preview */
+/* Image preview */
 
 .preview-imagen {
     position: relative;
-    min-height: 230px;
+    min-height: 260px;
     background-size: cover;
     background-position: center;
     border-radius: 12px;
@@ -382,9 +382,9 @@ a {
 }
 
 
-/* Color Picker - Vertical Layout */
+/* Color picker vertical */
 
-.color-picker-input-large {
+/* .color-picker-input-large {
     width: 80px;
     height: 80px;
     padding: 5px;
@@ -411,12 +411,12 @@ a {
     font-family: "Courier New", monospace;
     font-weight: 600;
     letter-spacing: 0.5px;
-}
+} */
 
 
-/* Color Picker - Horizontal Layout (deprecated) */
+/* Color picker horizontal */
 
-.color-picker-input {
+/* .color-picker-input {
     width: 60px;
     height: 40px;
     padding: 3px;
@@ -434,7 +434,7 @@ a {
     outline: none;
     border-color: #4b9f73;
     box-shadow: 0 0 0 3px rgba(75, 159, 115, 0.1);
-}
+} */
 
 
 /* Responsive */
