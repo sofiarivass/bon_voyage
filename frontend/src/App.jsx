@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './assets/logo.png'
-import './style.css'
+import './assets/styles/style.css'
+import './assets/components/main'
 
 import Header from './assets/components/Header';
-import Inicio from './assets/components/Inicio';
+import Inicio from './assets/pages/Inicio';
 import Footer from './assets/components/Footer';
+
 
 
 
