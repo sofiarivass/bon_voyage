@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './assets/logo.png'
 import './assets/styles/style.css'
-import './assets/components/main'
+import './assets/components/main.js'
 
 import Header from './assets/components/Header';
 import Inicio from './assets/pages/Inicio';
