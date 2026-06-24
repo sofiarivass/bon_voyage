@@ -202,13 +202,7 @@ function actualizarPreview() {
 
 // guardar viaje
 function guardarViaje(img) {
-    let color = document.getElementById("color").value;
-    let pais = document.getElementById("pais").value;
-    let ciudad = document.getElementById("ciudad").value;
-    let ida = document.getElementById("ida").value;
-    let vuelta = document.getElementById("vuelta").value;
-    let presupuesto = document.getElementById("presupuesto").value;
-    let notas = document.getElementById("notas").value;
+    const { color, pais, ciudad, ida, vuelta, presupuesto, notas } = form;
     let estado = "";
     let dias = calcularDias(ida, vuelta);
 
@@ -237,160 +231,36 @@ function guardarViaje(img) {
             dias
         );
 
-        viajes.push(viaje);
+        setViajes([...viajes, viaje]);
     } else {
         // editar viaje
-        for (let i = 0; i < viajes.length; i++) {
-            if (viajes[i].id == id) {
-                viajes[i].imagen = img;
-                viajes[i].color = color;
-                viajes[i].pais = pais;
-                viajes[i].ciudad = ciudad;
-                viajes[i].ida = ida;
-                viajes[i].vuelta = vuelta;
-                viajes[i].presupuesto = presupuesto;
-                viajes[i].notas = notas;
-                viajes[i].estado = estado;
-                viajes[i].dias = calcularDias(ida, vuelta);
+        const viajesActualizados = viajes.map(v => {
+            if (v.id == id) {
+                return { ...v, imagen: img, color, pais, ciudad, ida, vuelta, presupuesto, notas, estado, dias: calcularDias(ida, vuelta) };
             }
-        }
+            return v;
+        });
+        setViajes(viajesActualizados);
     }
 
     // guardar cambios
-    localStorage.setItem("viajes", JSON.stringify(viajes));
 
-    // reconstruir interfaz
-    cargarViajes();
+    // Si era un viaje nuevo, usás la variable correspondiente.
+    localStorage.setItem("viajes", JSON.stringify(viajesActualizados)); 
+    // NOTA: Borrás por completo la línea 'cargarViajes();
 }
 
 
 // renderiza las cards de los viajes
-function cargarViajes() {
-    actualizarEstados();
-    calculosDashboard();
-
-    contenedor.innerHTML = "";
-
-    let viajesFiltrados = [];
-
-    // filtrar viajes según estado
-    for (let i = 0; i < viajes.length; i++) {
-        if (filtro_seleccionado == "todos") {
-            viajesFiltrados.push(viajes[i]);
-        } else if (filtro_seleccionado == "pendientes" && viajes[i].estado == "Pendiente") {
-            viajesFiltrados.push(viajes[i]);
-        } else if (filtro_seleccionado == "en_curso" && viajes[i].estado == "En curso") {
-            viajesFiltrados.push(viajes[i]);
-        } else if (filtro_seleccionado == "completados" && viajes[i].estado == "Completado") {
-            viajesFiltrados.push(viajes[i]);
-        }
-    }
-
-    // metodo para ordenar por fecha de ida
-    viajesFiltrados.sort(function(a, b) {
-        let fechaA = fechaLocal(a.ida);
-        let fechaB = fechaLocal(b.ida);
-        return fechaA - fechaB;
-    });
-
-    // mensajes si no hay resultados
-    if (viajes.length == 0) {
-        contenedor.innerHTML = `
-            <p id="no-viajes">
-                No tenés viajes planificados
-            </p>
-        `;
-        return;
-    }
-
-    if (viajesFiltrados.length == 0) {
-        contenedor.innerHTML = `
-            <p id="no-viajes">
-                No hay viajes para este filtro
-            </p>
-        `;
-        return;
-    }
-
-    // renderizar cards
-    for (let i = 0; i < viajesFiltrados.length; i++) {
-        let viaje = viajesFiltrados[i];
-        let card = document.createElement("div");
-        card.className = "col-12 col-md-6 col-lg-4";
-
-        card.innerHTML = `
-            <div data-bs-toggle="modal"
-                data-bs-target="#modal-detalles"
-                class="card-viaje-link">
-                <article class="card card-viaje border-0 h-100">
-                    <div class="card-viaje-media" style="background-image: url('${viaje.imagen}');">
-                        <span class="placa-viaje" style="background: ${viaje.color}">${viaje.pais}</span>
-                    </div>
-                    <div class="card-body card-viaje-body">
-                        <h2 class="titulo-viaje">${viaje.ciudad}</h2>
-                        <p class="fechas-viaje">${formatearFecha(viaje.ida)} - ${formatearFecha(viaje.vuelta)}</p>
-                        <p class="precio-viaje" style="color: ${viaje.color}; opacity: 0.6;">$${viaje.presupuesto}</p>
-                    </div>
-                </article>
-            </div>
-        `;
-
-        // abrir modal de detalles
-        card.onclick = function() {
-            viaje_seleccionado = viaje;
-            modal_detalles.innerHTML = `
-                <div class="row g-4 align-items-start">
-                    <div class="col-12 col-lg-5">
-                        <div class="card border-0 h-100 shadow-sm overflow-hidden" style="background: ${viaje.color};">
-
-                            <div class="card-body p-0">
-                                <div class="card-viaje-media" style="min-height: 308px; background-image: url('${viaje.imagen}');"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-7">
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge rounded-pill" style="background: ${viaje.color}; color: #fff;">${viaje.estado}</span>
-                        </div>
-                        <h2 class="h3 mb-2">${viaje.ciudad}</h2>
-                        <p class="text-muted mb-4">${viaje.pais}</p>
-                        <div class="row g-3 mb-4">
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded-3 border bg-light h-100">
-                                    <small class="text-uppercase text-muted d-block mb-1">Fecha de ida</small>
-                                    <strong>${formatearFecha(viaje.ida)}</strong>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded-3 border bg-light h-100">
-                                    <small class="text-uppercase text-muted d-block mb-1">Fecha de vuelta</small>
-                                    <strong>${formatearFecha(viaje.vuelta)}</strong>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded-3 border bg-light h-100">
-                                    <small class="text-uppercase text-muted d-block mb-1">Duración del viaje</small>
-                                    <strong>${viaje.dias} días</strong>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="p-3 rounded-3 border bg-light h-100">
-                                    <small class="text-uppercase text-muted d-block mb-1">Presupuesto est.</small>
-                                    <strong>$${viaje.presupuesto}</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-3 rounded-3 border">
-                    <small class="text-uppercase text-muted d-block mb-2">Notas</small>
-                    <p class="mb-0">${viaje.notas}</p>
-                </div>
-            `;
-        };
-        contenedor.appendChild(card);
-    }
-}
+const viajesFiltrados = viajes
+    .filter(viaje => {
+        if (filtroSeleccionado === "todos") return true;
+        if (filtroSeleccionado === "pendientes") return viaje.estado === "Pendiente";
+        if (filtroSeleccionado === "en_curso") return viaje.estado === "En curso";
+        if (filtroSeleccionado === "completados") return viaje.estado === "Completado";
+        return true;
+    })
+    .sort((a, b) => fechaLocal(a.ida) - fechaLocal(b.ida));
 
 
 // actualizar estados automáticamente
@@ -412,11 +282,6 @@ function actualizarEstados() {
 
 // cálculos del dashboard
 function calculosDashboard() {
-    let viajes_planificados = document.getElementById("viajes-planificados");
-    let viajes_completados = document.getElementById("viajes-completados");
-    let presupuesto_total = document.getElementById("presupuesto-total");
-    let dias_totales = document.getElementById("dias-totales");
-
     let total = 0;
     let dias = 0;
     let planificados = 0;
@@ -433,17 +298,7 @@ function calculosDashboard() {
         dias += viajes[i].dias;
     }
 
-    if (viajes.length == 0) {
-        viajes_planificados.innerText = 0;
-        viajes_completados.innerText = 0;
-        presupuesto_total.innerText = "$0";
-        dias_totales.innerText = 0;
-    } else {
-        viajes_planificados.innerText = planificados;
-        viajes_completados.innerText = completados;
-        presupuesto_total.innerText = `$${total}`;
-        dias_totales.innerText = dias;
-    }
+    return { planificados, completados, total, dias };
 }
 
 
