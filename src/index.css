@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-
-/* --- ESTILOS GENERALES Y BASE --- */
 body {
     margin: 0;
     min-height: 100vh;
@@ -8,15 +5,6 @@ body {
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-}
-
-/* Forzamos a que los títulos principales usen Lexend como el diseño original */
-h1, h2, h3, .titulo-viaje {
-    font-family: "Lexend", sans-serif !important;
-}
-
-main {
-    min-height: 100vh;
 }
 
 main,
@@ -40,18 +28,12 @@ h1 {
     color: #24282e;
 }
 
-a {
-    text-decoration: none;
-}
-
-/* --- DASHBOARD CARDS (PANEL) --- */
 .dashboard-cards {
     width: 100%;
 }
 
 .dashboard-card {
-    border-radius: 14px !important; /* Mantiene tus bordes originales */
-    border: none !important;        /* Elimina bordes grises de Bootstrap */
+    border-radius: 14px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
@@ -67,7 +49,6 @@ a {
 }
 
 .dashboard-card-valor {
-    font-family: "Lexend", sans-serif; /* Consistencia con tu fuente original */
     font-size: 2rem;
     line-height: 1.1;
     margin: 0.35rem 0;
@@ -75,57 +56,72 @@ a {
     color: #101318;
 }
 
+#viajes-planificados {
+    color: #2f6e45;
+}
+
+#viajes-completados {
+    color: #3f6ea1;
+}
+
+#presupuesto-total {
+    color: #8f5f15;
+}
+
+#dias-totales {
+    color: #653a87;
+}
+
 .dashboard-card-texto {
-    font-family: "Lexend", sans-serif;
     font-size: 0.98rem;
     line-height: 1.25;
     margin: 0;
     color: #303742;
 }
 
-.card-body {
-    padding: 2.2rem 1.25rem;
-}
-
-/* Variantes de colores de las tarjetas del Dashboard */
-#viajes-planificados { color: #2f6e45; }
-#viajes-completados  { color: #3f6ea1; }
-#presupuesto-total   { color: #8f5f15; }
-#dias-totales        { color: #653a87; }
-
 .dashboard-card-planificados {
-    background-color: #e7f4ea !important;
+    background-color: #e7f4ea;
 }
+
 .dashboard-card-planificados .dashboard-icon {
     background-color: #d0e9d8;
     color: #2f6e45;
 }
 
 .dashboard-card-completados {
-    background-color: #e5effa !important;
+    background-color: #e5effa;
 }
+
 .dashboard-card-completados .dashboard-icon {
     background-color: #d5e6fa;
     color: #3f6ea1;
 }
 
 .dashboard-card-presupuesto {
-    background-color: #f7ecd8 !important;
+    background-color: #f7ecd8;
 }
+
 .dashboard-card-presupuesto .dashboard-icon {
     background-color: #f1ddbc;
     color: #8f5f15;
 }
 
 .dashboard-card-dias {
-    background-color: #eee1f6 !important;
+    background-color: #eee1f6;
 }
+
 .dashboard-card-dias .dashboard-icon {
     background-color: #e4d2f3;
     color: #653a87;
 }
 
-/* --- FILTROS --- */
+.card-body {
+    padding: 2.2rem 1.25rem;
+}
+
+
+/* FILTRO */
+
 .form-check-input:checked {
     background-color: #7fbbf6;
     border-color: #7fbbf6;
@@ -137,7 +133,9 @@ a {
     box-shadow: 0 0 0 .15rem rgba(13, 110, 253, .15);
 }
 
-/* --- SECCIÓN MIS VIAJES --- */
+
+/* MIS VIAJES */
+
 #viajes {
     margin-top: 1.25rem;
 }
@@ -162,6 +160,16 @@ a {
     margin-top: 0.25rem;
 }
 
+@media (max-width: 767.98px) {
+    .viajes-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .viajes-acciones {
+        justify-content: flex-start;
+    }
+}
+
 .boton-gris,
 .boton-verde,
 #btn-eliminar-viaje {
@@ -184,7 +192,6 @@ a {
     background-color: #3d8d63 !important;
 }
 
-/* --- TARJETAS DE VIAJE (CARDS) --- */
 .card-viaje-link {
     display: block;
     color: inherit;
@@ -217,6 +224,7 @@ a {
     min-height: 230px;
     background-size: cover;
     background-position: center;
+    /* background-image: url("https://placehold.net/default.svg"); */
 }
 
 .card-viaje-media::after {
@@ -237,6 +245,11 @@ a {
     font-size: 0.95rem;
     font-weight: 500;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    /* background: #595b2a; */
+}
+
+a {
+    text-decoration: none;
 }
 
 .card-viaje-body {
@@ -260,6 +273,7 @@ a {
     margin: 0;
     font-weight: 700;
     font-size: 1.05rem;
+    /* color: #2f6e45; */
 }
 
 #no-viajes {
@@ -270,7 +284,9 @@ a {
     font-style: italic;
 }
 
-/* --- MODAL EDICIÓN Y FORMULARIOS --- */
+
+/* modal edicion */
+
 .edit-trip-modal {
     border-radius: 18px;
 }
@@ -317,7 +333,9 @@ a {
     box-shadow: 0 0 0 0.2rem rgba(75, 159, 115, 0.1);
 }
 
-/* Image Upload & Preview */
+
+/* Image Upload */
+
 .image-upload-wrapper {
     display: flex;
     flex-direction: column;
@@ -333,7 +351,10 @@ a {
     font-size: 0.85rem;
 }
 
-.preview-imagen, .image-preview {
+
+/* Image Preview */
+
+.preview-imagen {
     position: relative;
     min-height: 230px;
     background-size: cover;
@@ -360,7 +381,9 @@ a {
     z-index: 2;
 }
 
-/* Color Picker - Layouts */
+
+/* Color Picker - Vertical Layout */
+
 .color-picker-input-large {
     width: 80px;
     height: 80px;
@@ -390,6 +413,9 @@ a {
     letter-spacing: 0.5px;
 }
 
+
+/* Color Picker - Horizontal Layout (deprecated) */
+
 .color-picker-input {
     width: 60px;
     height: 40px;
@@ -410,18 +436,14 @@ a {
     box-shadow: 0 0 0 3px rgba(75, 159, 115, 0.1);
 }
 
-/* --- FOOTER --- */
-footer {
-    background-color: #eaeaea;
-    text-align: center;
-}
 
-/* --- RESPONSIVE MEDIA QUERIES --- */
+/* Responsive */
+
 @media (max-width: 991.98px) {
     .form-row {
         grid-template-columns: 1fr;
     }
-    .image-preview, .preview-imagen {
+    .image-preview {
         min-height: 180px;
     }
     .color-picker-wrapper-vertical {
@@ -433,21 +455,11 @@ footer {
     }
 }
 
-@media (max-width: 767.98px) {
-    .viajes-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .viajes-acciones {
-        justify-content: flex-start;
-    }
-}
-
 @media (max-width: 576px) {
     .form-row {
         grid-template-columns: 1fr;
     }
-    .image-preview, .preview-imagen {
+    .image-preview {
         min-height: 160px;
     }
     .color-picker-wrapper {
