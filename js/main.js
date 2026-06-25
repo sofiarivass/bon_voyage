@@ -170,10 +170,7 @@ let getBandera = async(paisName) => {
         imgBandera.src = flagURL;
         imgBandera.style.display = "block";
 
-        // store current flag so subsequent preview updates keep it
         bandera_actual = flagURL;
-
-
 
         actualizarPreview(imgBandera.src);
 
