@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { auth } from './utils/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import Login from './components/Login';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Filtros from './components/Filtros';
@@ -17,6 +20,7 @@ export default function App() {
     const [filtro, setFiltro] = useState("todos");
     const [viajeSeleccionado, setViajeSeleccionado] = useState(null);
     const [editandoViaje, setEditandoViaje] = useState(null);
+    const [user, setUser] = useState(null);
 
     // Efecto para sincronizar con LocalStorage y recalcular estados de tiempo reales continuamente
     useEffect(() => {
@@ -32,6 +36,14 @@ export default function App() {
         localStorage.setItem("viajes", JSON.stringify(viajes));
     }, [viajes]);
 
+    // Efecto para manejar la autenticación del usuario
+    useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+        setUser(u);
+    });
+    return () => unsubscribe();
+    }, []);
+
     // Manejar inserción o actualización de viajes
     const handleGuardarViaje = (viajeEditado) => {
         const existe = viajes.some(v => v.id === viajeEditado.id);
@@ -42,6 +54,7 @@ export default function App() {
         }
     };
 
+    // Manejar eliminación de viajes con confirmación
     const handleEliminarViaje = () => {
         if (viajeSeleccionado && window.confirm("¿Seguro que querés eliminar este viaje?")) {
             setViajes(viajes.filter(v => v.id !== viajeSeleccionado.id));
@@ -57,12 +70,16 @@ export default function App() {
         })
         .sort((a, b) => fechaLocal(a.ida) - fechaLocal(b.ida));
 
+
+    if (!user) {
+        return <Login onSuccess={(u) => setUser(u)} />;
+    }
     return (
         <>
-            <Header />
+            <Header user={user} onLogout={() => signOut(auth)} />
             <main>
                 <div class="container">
-                    <Dashboard viajes={viajes} />
+                    <Dashboard viajes={viajes} user={user} />
                     
                     <section id="viajes">
                         <Filtros 

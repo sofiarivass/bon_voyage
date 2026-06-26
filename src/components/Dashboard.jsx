@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Dashboard({ viajes }) {
+export default function Dashboard({ viajes, user }) {
     // Cálculos basados en el estado actual de los viajes
     const calculos = viajes.reduce((acumulador, viaje) => {
         if (viaje.estado === "Pendiente" || viaje.estado === "En curso") {
@@ -15,7 +15,7 @@ export default function Dashboard({ viajes }) {
 
     return (
         <section id="dashboard">
-            <h1>¡Hola, viajero!</h1>
+            <h1>¡Hola, {user?.displayName || user?.email?.split("@")[0] || "viajero"}!</h1>
             <p class="p-color">Resumen de tu actividad</p>
 
             <div class="row g-3 mt-1 dashboard-cards">
