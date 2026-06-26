@@ -226,6 +226,19 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
         const modalEl = document.getElementById('modal-form');
         const modal = bootstrap.Modal.getInstance(modalEl);
         if (modal) modal.hide();
+
+        // 1. ✨ LIMPIEZA DEL FORMULARIO BÁSICO
+        setFormData({
+            pais: '', ciudad: '', bandera: '', ida: '',
+            vuelta: '', presupuesto: '', notas: '', color: '#4b9f73', estado: 'pendiente'
+        });
+        setImagen('https://placehold.net/default.svg');
+
+        // 2. 📸 ✨ LIMPIEZA DE LOS ESTADOS DE UNSPLASH
+        setMostrarGaleria(false);
+        setBusquedaUnsplash('');
+        setResultadosUnsplash([]);
+        setErrorUnsplash('');
     };
 
     return (
