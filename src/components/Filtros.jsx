@@ -3,9 +3,9 @@ import React from 'react';
 export default function Filtros({ filtroSeleccionado, setFiltroSeleccionado, onNuevoViajeClick }) {
     const opciones = [
         { id: 'todos', label: 'Todos' },
-        { id: 'pendientes', label: 'Pendientes' },
+        { id: 'pendiente', label: 'Pendientes' },
         { id: 'en_curso', label: 'En curso' },
-        { id: 'completados', label: 'Completados' }
+        { id: 'completado', label: 'Completados' }
     ];
 
     return (

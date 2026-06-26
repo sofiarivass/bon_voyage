@@ -13,6 +13,14 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
 
     const BASE_URL = 'https://countriesnow.space/api/v0.1/countries';
 
+    // ---- ESTADOS PARA UNSPLASH ----
+    const UNSPLASH_ACCESS_KEY = 'GL9Xc8f5pLKivzb4S_pZ0NX18zOSOfm7xP4F4S5zzVA';
+    const [mostrarGaleria, setMostrarGaleria] = useState(false);
+    const [busquedaUnsplash, setBusquedaUnsplash] = useState('');
+    const [resultadosUnsplash, setResultadosUnsplash] = useState([]);
+    const [cargandoUnsplash, setCargandoUnsplash] = useState(false);
+    const [errorUnsplash, setErrorUnsplash] = useState('');
+
     useEffect(() => {
         fetch(BASE_URL)
             .then(res => res.json())
@@ -39,15 +47,15 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ country: paisSeleccionado })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (!data.error && data.data) {
-                setCiudades(data.data);
-            } else {
-                setCiudades([]);
-            }
-        })
-        .catch(err => console.error("Fallo en encontrar ciudades:", err));
+            .then(res => res.json())
+            .then(data => {
+                if (!data.error && data.data) {
+                    setCiudades(data.data);
+                } else {
+                    setCiudades([]);
+                }
+            })
+            .catch(err => console.error("Fallo en encontrar ciudades:", err));
 
         // Usamos esto para buscar la Bandera
         fetch(`${BASE_URL}/flag/images`, {
@@ -55,13 +63,13 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ country: paisSeleccionado })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (!data.error && data.data) {
-                setFormData(prev => ({ ...prev, bandera: data.data.flag }));
-            }
-        })
-        .catch(err => console.error("Fallo en encontrar bandera:", err));
+            .then(res => res.json())
+            .then(data => {
+                if (!data.error && data.data) {
+                    setFormData(prev => ({ ...prev, bandera: data.data.flag }));
+                }
+            })
+            .catch(err => console.error("Fallo en encontrar bandera:", err));
 
     }, [formData.pais]);
 
@@ -82,17 +90,24 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
             setImagen(viajeAEditar.imagen || 'https://placehold.net/default.svg');
         } else {
             // Modo creación / Reset del formulario
-            setFormData({ 
-                pais: '', ciudad: '', bandera: '', ida: '', 
-                vuelta: '', presupuesto: '', notas: '', color: '#4b9f73', estado: 'pendiente' 
+            setFormData({
+                pais: '', ciudad: '', bandera: '', ida: '',
+                vuelta: '', presupuesto: '', notas: '', color: '#4b9f73', estado: 'pendiente'
             });
             setImagen('https://placehold.net/default.svg');
         }
+
+        // Limpiamos Unsplash al cambiar de viaje
+        setMostrarGaleria(false);
+        setBusquedaUnsplash('');
+        setResultadosUnsplash([]);
+        setErrorUnsplash('');
+
     }, [viajeAEditar]);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
-        
+
         if (id === 'pais') {
             // Si cambia el país, reseteamos la ciudad y la bandera temporalmente
             setFormData(prev => ({ ...prev, pais: value, ciudad: '', bandera: '' }));
@@ -109,6 +124,71 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
             reader.readAsDataURL(file);
         }
     };
+
+    // ---- FUNCIONES DE UNSPLASH ----
+
+    const handleImgAleatoria = async () => {
+        const query = `${formData.ciudad} ${formData.pais}`.trim();
+        if (!query) {
+            alert("Por favor, ingresá un país o ciudad primero para poder buscar una foto.");
+            return;
+        }
+
+        try {
+            const url = `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&client_id=${UNSPLASH_ACCESS_KEY}&orientation=landscape`;
+            const respuesta = await fetch(url);
+            if (!respuesta.ok) throw new Error("Error al obtener foto aleatoria");
+
+            const foto = await respuesta.json();
+            setImagen(foto.urls.regular); // Actualiza la imagen en React
+        } catch (error) {
+            console.error(error);
+            alert("No se pudo encontrar una foto automática para este destino. ¡Probá con el buscador manual!");
+        }
+    };
+
+    const toggleGaleriaUnsplash = () => {
+        setMostrarGaleria(prev => {
+            const abriendo = !prev;
+
+            // Si estamos abriendo la galería, forzamos el nuevo texto de búsqueda
+            if (abriendo) {
+                const query = `${formData.ciudad} ${formData.pais}`.trim();
+                setBusquedaUnsplash(query);
+            }
+
+            return abriendo;
+        });
+    };
+
+    const buscarGaleriaUnsplash = async () => {
+        if (!busquedaUnsplash.trim()) return;
+
+        setCargandoUnsplash(true);
+        setErrorUnsplash('');
+        setResultadosUnsplash([]);
+
+        try {
+            const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(busquedaUnsplash)}&client_id=${UNSPLASH_ACCESS_KEY}&per_page=6&orientation=landscape`;
+            const respuesta = await fetch(url);
+            if (!respuesta.ok) throw new Error("Error en la galería Unsplash");
+
+            const datos = await respuesta.json();
+
+            if (datos.results.length === 0) {
+                setErrorUnsplash("No se encontraron imágenes.");
+            } else {
+                setResultadosUnsplash(datos.results);
+            }
+        } catch (error) {
+            console.error(error);
+            setErrorUnsplash("Error al conectar con la galería.");
+        } finally {
+            setCargandoUnsplash(false);
+        }
+    };
+
+    // ---- SUBMIT DEL FORMULARIO ----
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -133,7 +213,7 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
         }
 
         // Armamos el objeto final mapeado
-         const viajeFinal = {
+        const viajeFinal = {
             id: viajeAEditar ? viajeAEditar.id : Date.now(),
             imagen,
             dias: calcularDias(formData.ida, formData.vuelta),
@@ -167,21 +247,69 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
                                         <span className="placa-viaje" style={{ background: formData.color }}>
                                             {formData.pais || "País"}
                                             {formData.bandera && (
-                                                <img 
-                                                    src={formData.bandera} 
-                                                    alt="Bandera" 
-                                                    style={{ width: '20px', marginLeft: '8px', display: 'inline-block', verticalAlign: 'middle' }} 
+                                                <img
+                                                    src={formData.bandera}
+                                                    alt="Bandera"
+                                                    style={{ width: '20px', marginLeft: '8px', display: 'inline-block', verticalAlign: 'middle' }}
                                                 />
                                             )}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="form-section col-lg-6">
-                                    <label htmlFor="imagen-viaje" className="form-label">Cargar nueva imagen</label>
-                                    <div className="image-upload-wrapper">
-                                        <input type="file" className="form-control" id="imagen-viaje" accept="image/*" onChange={handleImagenChange} />
-                                        <small className="form-text text-muted">JPG, PNG o GIF. Tamaño máximo 5MB.</small>
+                                    <label className="form-label d-block">Imagen del viaje</label>
+
+                                    {/* BOTONES DE IMAGENES */}
+                                    <div className="d-flex flex-wrap gap-2 mb-2 mt-1">
+                                        <label htmlFor="imagen-viaje" className="btn btn-custom-gris btn-sm mb-0 btn-redondeado">
+                                            <i className="bi bi-upload"></i> Subir propia
+                                        </label>
+                                        <input type="file" id="imagen-viaje" accept="image/*" onChange={handleImagenChange} style={{ display: 'none' }} />
+
+                                        <button type="button" className="btn btn-custom-azul btn-sm btn-redondeado" onClick={handleImgAleatoria}>
+                                            <i className="bi bi-shuffle"></i> Aleatoria
+                                        </button>
+
+                                        <button type="button" className="btn btn-custom-verde btn-sm btn-redondeado" onClick={toggleGaleriaUnsplash}>
+                                            <i className="bi bi-search"></i> Buscar en Unsplash
+                                        </button>
                                     </div>
+
+                                    {/* BUSCADOR Y GALERIA UNSPLASH CONDICIONAL */}
+                                    {mostrarGaleria && (
+                                        <div className="border rounded p-2 bg-light">
+                                            <div className="input-group input-group-sm mb-2">
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="Ej: Playa, París..."
+                                                    value={busquedaUnsplash}
+                                                    onChange={(e) => setBusquedaUnsplash(e.target.value)}
+                                                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), buscarGaleriaUnsplash())}
+                                                />
+                                                <button className="btn btn-success" type="button" onClick={buscarGaleriaUnsplash}>
+                                                    Buscar
+                                                </button>
+                                            </div>
+
+                                            <div className="row g-1 row-cols-3 overflow-y-auto" style={{ maxHeight: '130px' }}>
+                                                {cargandoUnsplash && <p className="col-12 text-muted text-center small py-2">Buscando opciones... 📸</p>}
+                                                {errorUnsplash && <p className="col-12 text-danger text-center small py-2">{errorUnsplash}</p>}
+
+                                                {!cargandoUnsplash && resultadosUnsplash.map((foto) => (
+                                                    <div className="col" key={foto.id}>
+                                                        <img
+                                                            src={foto.urls.thumb}
+                                                            className={`img-fluid rounded img-thumbnail ${imagen === foto.urls.regular ? 'border-primary border-3' : ''}`}
+                                                            style={{ cursor: 'pointer', height: '55px', width: '100%', objectFit: 'cover' }}
+                                                            alt={foto.alt_description || 'Foto Unsplash'}
+                                                            onClick={() => setImagen(foto.urls.regular)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                     <label htmlFor="color" className="form-label mt-3">Color de la tarjeta</label>
                                     <input type="color" className="form-control color-picker-input-large" id="color" value={formData.color} onChange={handleChange} />
                                 </div>
@@ -190,11 +318,11 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
                             <div className="row mt-3">
                                 <div className="form-section col-md-6">
                                     <label htmlFor="pais" className="form-label">País</label>
-                                    <select 
-                                        className="form-select" 
-                                        id="pais" 
-                                        value={formData.pais} 
-                                        onChange={handleChange} 
+                                    <select
+                                        className="form-select"
+                                        id="pais"
+                                        value={formData.pais}
+                                        onChange={handleChange}
                                         required
                                     >
                                         <option value="">Seleccione País</option>
@@ -205,11 +333,11 @@ export default function ModalFormulario({ viajeAEditar, onGuardar, viajesExisten
                                 </div>
                                 <div className="form-section col-md-6">
                                     <label htmlFor="ciudad" className="form-label">Ciudad/es</label>
-                                    <select 
-                                        className="form-select" 
-                                        id="ciudad" 
-                                        value={formData.ciudad} 
-                                        onChange={handleChange} 
+                                    <select
+                                        className="form-select"
+                                        id="ciudad"
+                                        value={formData.ciudad}
+                                        onChange={handleChange}
                                         required
                                         disabled={!formData.pais || ciudades.length === 0}
                                     >

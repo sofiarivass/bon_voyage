@@ -24,7 +24,7 @@ export default function Dashboard({ viajes }) {
                         <div class="card-body d-flex gap-3 align-items-start">
                             <span class="dashboard-icon"><i class="bi bi-airplane"></i></span>
                             <div>
-                                <p class="dashboard-card-valor">{calculos.planificados}</p>
+                                <p id="viajes-planificados" class="dashboard-card-valor">{calculos.planificados}</p>
                                 <p class="dashboard-card-texto">Viajes planificados</p>
                             </div>
                         </div>
@@ -36,7 +36,7 @@ export default function Dashboard({ viajes }) {
                         <div class="card-body d-flex gap-3 align-items-start">
                             <span class="dashboard-icon"><i class="bi bi-check-circle"></i></span>
                             <div>
-                                <p class="dashboard-card-valor">{calculos.completados}</p>
+                                <p id="viajes-completados" class="dashboard-card-valor">{calculos.completados}</p>
                                 <p class="dashboard-card-texto">Viajes completados</p>
                             </div>
                         </div>
@@ -48,7 +48,7 @@ export default function Dashboard({ viajes }) {
                         <div class="card-body d-flex gap-3 align-items-start">
                             <span class="dashboard-icon"><i class="bi bi-wallet2"></i></span>
                             <div>
-                                <p class="dashboard-card-valor">${calculos.total}</p>
+                                <p id="presupuesto-total" class="dashboard-card-valor">${calculos.total}</p>
                                 <p class="dashboard-card-texto">Presupuesto total estimado</p>
                             </div>
                         </div>
@@ -60,7 +60,7 @@ export default function Dashboard({ viajes }) {
                         <div class="card-body d-flex gap-3 align-items-start">
                             <span class="dashboard-icon"><i class="bi bi-calendar3"></i></span>
                             <div>
-                                <p class="dashboard-card-valor">{calculos.dias}</p>
+                                <p id="dias-totales" class="dashboard-card-valor">{calculos.dias}</p>
                                 <p class="dashboard-card-texto">Días de viaje en total</p>
                             </div>
                         </div>
