@@ -1,4 +1,6 @@
 import React from 'react';
+import logo from "../assets/logo.png";
+
 
 export default function Header({ user, onLogout }) {
     const nombre = user?.displayName || user?.email?.split("@")[0] || "viajero";
@@ -8,7 +10,7 @@ export default function Header({ user, onLogout }) {
             <nav className="navbar justify-content-center">
                 <div className="container-fluid justify-content-between">
                     <a className="navbar-brand mx-auto">
-                        <img src="./src/assets/logo.png" alt="Logo Bon Voyage" width="240" height="auto" />
+                        <img src={logo} alt="Logo Bon Voyage" width="240" height="auto" />
                     </a>
                     <div className="d-flex align-items-center gap-2">
                         <span className="small text-muted fw-semibold d-none d-sm-inline">

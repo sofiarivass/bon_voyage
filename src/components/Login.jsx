@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { auth } from "../utils/firebase";
+import logo from "../assets/logo.png";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -83,7 +84,7 @@ export default function Login({ onSuccess }) {
       <div className="login-card p-4 p-sm-5 m-3">
 
         <div className="text-center mb-4">
-          <img src="./src/assets/logo.png" alt="Bon Voyage" className="img-fluid" style={{ maxHeight: "55px", objectFit: "contain" }} />
+          <img src={logo} alt="Bon Voyage" className="img-fluid" style={{ maxHeight: "55px", objectFit: "contain" }} />
         </div>
 
         {error && (
